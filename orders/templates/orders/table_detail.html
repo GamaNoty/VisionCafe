@@ -1,78 +1,59 @@
+{% extends 'layout/base.html' %}
+{% load static %}
 {% load qr_code %}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stůl {{ table.number }}</title>
-    <style>
-            :root {
-                --primary: #6f4e37; /* Kávová hnědá */
-                --accent: #e67e22;
-                --bg: #f9f9f9;
-            }
-            body { 
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-                background-color: var(--bg);
-                margin: 0;
-                padding: 15px;
-                color: #333;
-                display: flex;
-                flex-direction: column;
-                align-items:center;
-            }
-            .container {
-                max-width: 500px; /* Aby to na PC vypadalo jako úzký mobil */
-                margin: 0 auto;
-                background: white;
-                padding: 20px;
-                border-radius: 15px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }
-            button, .btn {
-                width: 100%; /* Velká tlačítka pro palce */
-                padding: 15px;
-                border: none;
-                border-radius: 10px;
-                background: var(--primary);
-                color: white;
-                font-size: 1.1rem;
-                font-weight: bold;
-                cursor: pointer;
-            }
-            select {
-                width: 100%;
-                padding: 12px;
-                margin-bottom: 15px;
-                border-radius: 8px;
-                border: 1px solid #ddd;
-            }
-    </style>
-</head>
-<body>
-    <h1>Kavárna U Pole - Stůl {{ table.number }}</h1>
+
+{% block title %}Stůl {{ table.number }} | Objednávka{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/table.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <h1>Stůl {{ table.number }}</h1>
     
-    <div style="margin: 20px 0;">
-        {% qr_from_text full_url size="M" %}
-        <p><small>Naskenuj pro objednávku z tohoto stolu</small></p>
+    <div class="qr-section">
+        {% qr_from_text full_url size="M" border=2 %}
+        <p class="small-gray">Naskenujte pro rychlou objednávku z tohoto stolu</p>
     </div>
 
-    <form method="post">
-        {% csrf_token %}
-        <select name="product_type" required>
-            {% for pt in product_types %}
-                <option value="{{ pt.id }}">{{ pt }}</option>
+    <div class="order-form">
+        <form method="post">
+            {% csrf_token %}
+            <label for="product_type">Na co máte chuť?</label>
+            <select name="product_type" id="product_type" required>
+                <option value="" disabled selected>Vyberte si nápoj...</option>
+                {% for pt in product_types %}
+                    <option value="{{ pt.id }}">{{ pt }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="mt-1">Odeslat objednávku</button>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <h3>Vaše dnešní objednávky</h3>
+    <table class="history-table">
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>
+                    <strong>{{ order.product_type }}</strong><br>
+                    <small class="small-gray">{{ order.created_at|date:"H:i" }}</small>
+                </td>
+                <td class="text-right">
+                    {% include 'orders/includes/status_badge.html' %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="text-center small-gray" style="padding: 2rem;">
+                    Zatím jste si nic neobjednali.
+                </td>
+            </tr>
             {% endfor %}
-        </select>
-        <button type="submit">Objednat</button>
-    </form>
-
-    <hr>
-
-    <h3>Vaše objednávky:</h3>
-    {% for order in orders %}
-        <div class="order-card">
-            {{ order.product_type }} - <span class="status">{{ order.calculated_status }}</span>
-        </div>
-    {% endfor %}
-</body>
-</html>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

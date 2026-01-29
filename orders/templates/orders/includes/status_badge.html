@@ -1,0 +1,10 @@
+<span class="badge 
+    {% if order.calculated_status == 'Nová' %}status-nova
+    {% elif order.calculated_status == 'Přijatá' %}status-prijata
+    {% elif order.calculated_status == 'Dokončená' %}status-dokoncena
+    {% elif order.calculated_status == 'Propáslá' %}status-propasla
+    {% elif order.calculated_status == 'Nestihnutá' %}status-nestihnuta
+    {% elif order.calculated_status == 'Odmítnutá' %}status-odmitnuta
+    {% endif %}">
+    {{ order.calculated_status }}
+</span>

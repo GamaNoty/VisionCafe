@@ -1,56 +1,65 @@
+{% extends 'layout/base.html' %}
+{% load static %}
 {% load qr_code %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard Zaměstnance</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .status-badge { padding: 5px 10px; border-radius: 4px; font-weight: bold; }
-        .btn { padding: 8px 15px; text-decoration: none; color: white; border-radius: 4px; display: inline-block; }
-        .btn-accept { background: #27ae60; }
-        .btn-reject { background: #c0392b; }
-        .btn-complete { background: #2980b9; }
-    </style>
-</head>
-<body>
-    <h1>Přehled objednávek - Kavárna U Pole</h1>
-    <p>Přihlášen jako: {{ user.username }} | <a href="{% url 'admin:logout' %}">Odhlásit</a></p>
 
-    <table>
+{% block title %}Dashboard zaměstnance | Kavárna U Pole{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/staff.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="staff-header">
+    <h2>Přehled objednávek</h2>
+    <div class="small-gray">
+        Přihlášen: <strong>{{ user.username }}</strong> | 
+        <a href="{% url 'admin:logout' %}" class="text-danger">Odhlásit</a>
+    </div>
+</div>
+
+<div class="card card-no-padding">
+    <table class="dashboard-table">
         <thead>
             <tr>
                 <th>Stůl</th>
-                <th>QR Stolu</th>
+                <th>QR Kód</th>
                 <th>Produkt</th>
-                <th>Čas vytvoření</th>
-                <th>Aktuální Stav</th>
-                <th>Akce</th>
+                <th>Čas</th>
+                <th>Stav</th>
+                <th class="text-center">Akce</th>
             </tr>
         </thead>
         <tbody>
             {% for order in orders %}
             <tr>
-                <td>Stůl {{ order.table.number }}</td>
-                <td>
-                    {% qr_from_text order.table.number size="S" %}
-                </td>
+                <td><strong>Stůl {{ order.table.number }}</strong></td>
+                <td>{% qr_from_text order.table.number size="S" border=1 %}</td>
                 <td>{{ order.product_type }}</td>
                 <td>{{ order.created_at|date:"H:i:s" }}</td>
                 <td>
-                    <span class="status-badge">{{ order.calculated_status }}</span>
+                    {% include 'orders/includes/status_badge.html' %}
                 </td>
-                <td>
-                    {% if order.status == 'PENDING' %}
-                        <a href="{% url 'order_action' order.id 'accept' %}" class="btn btn-accept">Přijmout</a>
-                        <a href="{% url 'order_action' order.id 'reject' %}" class="btn btn-reject">Odmítnout</a>
-                    {% elif order.status == 'ACCEPTED' %}
-                        <a href="{% url 'order_action' order.id 'complete' %}" class="btn btn-complete">Dokončit</a>
+                <td class="text-center">
+                    {% if order.status == 'PENDING' and order.calculated_status == 'Nová' %}
+                        <a href="{% url 'order_action' order.id 'accept' %}" class="btn-action btn-accept">✓ Přijmout</a>
+                        <a href="{% url 'order_action' order.id 'reject' %}" class="btn-action btn-reject">✕ Odmítnout</a>
+                    
+                    {% elif order.status == 'ACCEPTED' and order.calculated_status == 'Přijatá' %}
+                        <a href="{% url 'order_action' order.id 'complete' %}" class="btn-action btn-complete">☀ Dokončit</a>
+                    
+                    {% else %}
+                        <span class="small-gray">Bez akce</span>
                     {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center small-gray" style="padding: 3rem;">
+                    Aktuálně nejsou žádné nové objednávky.
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+</div>
+{% endblock %}
