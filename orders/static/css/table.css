@@ -1,0 +1,8 @@
+.qr-section { text-align: center; margin-bottom: 2rem; }
+.order-form { max-width: 400px; margin: 0 auto; }
+.order-form select, .order-form button { 
+    width: 100%; padding: 12px; margin-top: 10px; border-radius: 8px; border: 1px solid #ddd; 
+}
+.order-form button { background: var(--primary); color: white; border: none; font-weight: bold; }
+.history-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.history-table td { padding: 1rem 0; border-bottom: 1px solid #eee; }

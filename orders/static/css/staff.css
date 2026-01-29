@@ -1,0 +1,8 @@
+.staff-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.dashboard-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+.dashboard-table th, .dashboard-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+.dashboard-table thead { background: var(--light-gray); }
+.btn-action { padding: 8px 12px; font-size: 0.85rem; text-decoration: none; border-radius: 6px; color: white; display: inline-block; margin: 2px; }
+.btn-accept { background: var(--success); }
+.btn-reject { background: var(--danger); }
+.btn-complete { background: var(--primary-light); }
