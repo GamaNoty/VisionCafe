@@ -12,7 +12,6 @@ class OrderLogicTest(TestCase):
     def test_missed_order(self):
         """Test: Objednávka po 10 minutách bez přijetí je 'Propáslá'."""
         order = Order.objects.create(table=self.table, product_type=self.green_tea)
-        # Ruční posun času v DB
         Order.objects.filter(id=order.id).update(created_at=timezone.now() - timedelta(minutes=11))
         order.refresh_from_db()
         self.assertEqual(order.calculated_status, 'Propáslá')
