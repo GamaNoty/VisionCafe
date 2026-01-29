@@ -9,17 +9,24 @@ def table_detail(request, table_number):
         if product_type_id:
             Order.objects.create(
                 table=table,
-                product_type_id=product_type_id
+                product_type_id=product_type_id,
+                status='PENDING'
             )
             return redirect('table_detail', table_number=table.number)
 
+    product_types = ProductType.objects.all() 
     orders = Order.objects.filter(table=table).order_by('-created_at')
-    product_types = ProductType.objects.all()
-    
+
     context = {
         'table': table,
-        'orders': orders,
         'product_types': product_types,
+        'orders': orders,
         'full_url': request.build_absolute_uri(),
     }
     return render(request, 'orders/table_detail.html', context)
+
+def staff_dashboard(request):
+    return render(request, 'orders/staff_dashboard.html')
+
+def order_action(request, order_id, action):
+    return redirect('staff_dashboard')
