@@ -62,7 +62,6 @@ class Order(models.Model):
 
     def complete(self):
         """Zaměstnanec dokončuje objednávku."""
-        # Podle zadání lze dokončit jen přijatou (i nestihnutou)
         if self.status == 'ACCEPTED':
             self.status = 'COMPLETED'
             self.completed_at = timezone.now()
