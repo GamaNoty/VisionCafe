@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Table, Order, ProductType
 
 def table_detail(request, table_number):
@@ -25,8 +26,18 @@ def table_detail(request, table_number):
     }
     return render(request, 'orders/table_detail.html', context)
 
+@login_required
 def staff_dashboard(request):
-    return render(request, 'orders/staff_dashboard.html')
+    all_orders = Order.objects.all().order_by('-created_at')
+    return render(request, 'orders/staff_dashboard.html', {'orders': all_orders})
 
+@login_required
 def order_action(request, order_id, action):
+    order = get_object_or_404(Order, id=order_id)
+    if action == 'accept':
+        order.accept()
+    elif action == 'reject':
+        order.reject()
+    elif action == 'complete':
+        order.complete()
     return redirect('staff_dashboard')
