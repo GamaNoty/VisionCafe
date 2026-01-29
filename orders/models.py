@@ -27,6 +27,7 @@ class Order(models.Model):
         ('ACCEPTED', 'Přijatá'),
         ('REJECTED', 'Odmítnutá'),
         ('COMPLETED', 'Dokončená'),
+        ('TIMEDOUT', 'Propáslá')
     ]
 
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
@@ -41,10 +42,12 @@ class Order(models.Model):
     def calculated_status(self):
         now = timezone.now()
         if self.status == 'PENDING' and now > self.created_at + timedelta(minutes=10):
-            return 'Propáslá'
-        
+            return 'Propáslá'        
         if self.status == 'ACCEPTED' and self.accepted_at and now > self.accepted_at + timedelta(minutes=15):
-            return 'Nestihnutá'
+            return 'Nestihnutá'        
+        if self.status == 'REJECTED':
+            return 'Odmítnutá'
+        
         return self.get_status_display()
     
     def accept(self):
