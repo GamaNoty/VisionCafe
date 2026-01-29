@@ -77,8 +77,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'upole',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'DatabaseUpo',
         'USER': 'user',
         'PASSWORD': 'pass',
         'HOST': 'db',

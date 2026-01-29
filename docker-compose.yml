@@ -4,7 +4,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=upole
+      - POSTGRES_DB=DatabaseUpo
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=pass
   web:
@@ -15,7 +15,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgres://user:pass@db:5432/upole
+      - DATABASE_URL=postgres://user:pass@db:5432/DatabaseUpo
     depends_on:
       - db
 volumes:
