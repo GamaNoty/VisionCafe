@@ -1,0 +1,56 @@
+{% load qr_code %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Zaměstnance</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .status-badge { padding: 5px 10px; border-radius: 4px; font-weight: bold; }
+        .btn { padding: 8px 15px; text-decoration: none; color: white; border-radius: 4px; display: inline-block; }
+        .btn-accept { background: #27ae60; }
+        .btn-reject { background: #c0392b; }
+        .btn-complete { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <h1>Přehled objednávek - Kavárna U Pole</h1>
+    <p>Přihlášen jako: {{ user.username }} | <a href="{% url 'admin:logout' %}">Odhlásit</a></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Stůl</th>
+                <th>QR Stolu</th>
+                <th>Produkt</th>
+                <th>Čas vytvoření</th>
+                <th>Aktuální Stav</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>Stůl {{ order.table.number }}</td>
+                <td>
+                    {% qr_from_text order.table.number size="S" %}
+                </td>
+                <td>{{ order.product_type }}</td>
+                <td>{{ order.created_at|date:"H:i:s" }}</td>
+                <td>
+                    <span class="status-badge">{{ order.calculated_status }}</span>
+                </td>
+                <td>
+                    {% if order.status == 'PENDING' %}
+                        <a href="{% url 'order_action' order.id 'accept' %}" class="btn btn-accept">Přijmout</a>
+                        <a href="{% url 'order_action' order.id 'reject' %}" class="btn btn-reject">Odmítnout</a>
+                    {% elif order.status == 'ACCEPTED' %}
+                        <a href="{% url 'order_action' order.id 'complete' %}" class="btn btn-complete">Dokončit</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

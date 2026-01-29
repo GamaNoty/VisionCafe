@@ -1,0 +1,75 @@
+{% load qr_code %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stůl {{ table.number }}</title>
+    <style>
+            :root {
+                --primary: #6f4e37; /* Kávová hnědá */
+                --accent: #e67e22;
+                --bg: #f9f9f9;
+            }
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+                background-color: var(--bg);
+                margin: 0;
+                padding: 15px;
+                color: #333;
+            }
+            .container {
+                max-width: 500px; /* Aby to na PC vypadalo jako úzký mobil */
+                margin: 0 auto;
+                background: white;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            button, .btn {
+                width: 100%; /* Velká tlačítka pro palce */
+                padding: 15px;
+                border: none;
+                border-radius: 10px;
+                background: var(--primary);
+                color: white;
+                font-size: 1.1rem;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            select {
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 15px;
+                border-radius: 8px;
+                border: 1px solid #ddd;
+            }
+    </style>
+</head>
+<body>
+    <h1>Kavárna U Pole - Stůl {{ table.number }}</h1>
+    
+    <div style="margin: 20px 0;">
+        {% qr_from_text full_url size="M" %}
+        <p><small>Naskenuj pro objednávku z tohoto stolu</small></p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <select name="product_type" required>
+            {% for pt in product_types %}
+                <option value="{{ pt.id }}">{{ pt }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Objednat</button>
+    </form>
+
+    <hr>
+
+    <h3>Vaše objednávky:</h3>
+    {% for order in orders %}
+        <div class="order-card">
+            {{ order.product_type }} - <span class="status">{{ order.calculated_status }}</span>
+        </div>
+    {% endfor %}
+</body>
+</html>
