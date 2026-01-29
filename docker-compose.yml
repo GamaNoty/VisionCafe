@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=upole
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://user:pass@db:5432/upole
+    depends_on:
+      - db
+volumes:
+  postgres_data:
