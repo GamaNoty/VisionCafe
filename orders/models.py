@@ -46,3 +46,24 @@ class Order(models.Model):
         if self.status == 'ACCEPTED' and self.accepted_at and now > self.accepted_at + timedelta(minutes=15):
             return 'Nestihnutá'
         return self.get_status_display()
+    
+    def accept(self):
+        """Zaměstnanec přijímá objednávku."""
+        if self.status == 'PENDING':
+            self.status = 'ACCEPTED'
+            self.accepted_at = timezone.now()
+            self.save()
+
+    def reject(self):
+        """Zaměstnanec odmítá objednávku."""
+        if self.status == 'PENDING':
+            self.status = 'REJECTED'
+            self.save()
+
+    def complete(self):
+        """Zaměstnanec dokončuje objednávku."""
+        # Podle zadání lze dokončit jen přijatou (i nestihnutou)
+        if self.status == 'ACCEPTED':
+            self.status = 'COMPLETED'
+            self.completed_at = timezone.now()
+            self.save()
