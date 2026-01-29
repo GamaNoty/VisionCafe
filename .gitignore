@@ -1,0 +1,8 @@
+# Django generované soubory
+staticfiles/
+db.sqlite3
+__pycache__/
+*.py[cod]
+
+# Docker
+.env
