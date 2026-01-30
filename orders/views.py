@@ -39,9 +39,13 @@ def table_detail(request, table_number, token):
 @login_required
 @staff_member_required
 def staff_dashboard(request):
-    all_orders = Order.objects.all().order_by('-created_at')
-    return render(request, 'orders/staff_dashboard.html', {'orders': all_orders})
-    orders = Order.objects.all().order_id('-created_at')
+    orders = Order.objects.exclude(status='ARCHIVED').order_by('-created_at')
+    
+    tables = Table.objects.all().order_by('number')
+    return render(request, 'orders/staff_dashboard.html', {
+        'orders': orders,
+        'tables': tables
+    })
 
 @login_required
 @staff_member_required
@@ -53,4 +57,18 @@ def order_action(request, order_id, action):
         order.reject()
     elif action == 'complete':
         order.complete()
+    return redirect('staff_dashboard')
+
+def customer_cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if order.status == 'PENDING':
+        order.delete()
+    return redirect('table_detail', table_number=order.table.number, token=order.table.get_current_token())
+
+@staff_member_required
+def archive_order(request, order_id):
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id)
+        order.status = 'ARCHIVED' 
+        order.save()
     return redirect('staff_dashboard')
