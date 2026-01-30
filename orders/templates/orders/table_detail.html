@@ -67,6 +67,16 @@
         <td class="text-right">
           {% include 'orders/includes/status_badge.html' %}
         </td>
+        <td>
+          <div class="order-item">
+            {{ order.product_type }} - {{ order.get_status_display }}
+            {% if order.status == 'PENDING' %}
+                <a id="cancel-button" href="{% url 'customer_cancel_order' order.id %}">
+                   (Zrušit)
+                </a>
+            {% endif %}
+          </div>
+        </td>
       </tr>
       {% empty %}
       <tr>

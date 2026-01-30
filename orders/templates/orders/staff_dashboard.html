@@ -51,7 +51,12 @@
                         <a href="{% url 'order_action' order.id 'complete' %}" class="btn-action btn-complete">☀ Dokončit</a>
                     
                     {% else %}
-                        <span class="small-gray">Bez akce</span>
+                    <form class="remove-form"action="{% url 'archive_order' order.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-small">
+                            Odstranit z přehledu
+                        </button>
+                    </form>
                     {% endif %}
                 </td>
             </tr>
