@@ -4,6 +4,7 @@ from .models import Table, Order, ProductType
 
 def table_detail(request, table_number):
     table = get_object_or_404(Table, number=table_number)
+    products = Product.objects.all().prefetch_related('product_types')
     
     if request.method == 'POST':
         product_type_id = request.POST.get('product_type')
@@ -20,6 +21,7 @@ def table_detail(request, table_number):
 
     context = {
         'table': table,
+        'products': products,
         'product_types': product_types,
         'orders': orders,
         'full_url': request.build_absolute_uri(),

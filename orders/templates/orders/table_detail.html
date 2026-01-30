@@ -18,18 +18,37 @@
     </div>
 
     <div class="order-form">
-        <form method="post">
+        <form method="post" id="order-form">
             {% csrf_token %}
-            <label for="product_type">Na co máte chuť?</label>
-            <select name="product_type" id="product_type" required>
-                <option value="" disabled selected>Vyberte si nápoj...</option>
-                {% for pt in product_types %}
-                    <option value="{{ pt.id }}">{{ pt }}</option>
+            
+            <label for="product-select">Na co máte chuť?</label>
+            <select id="product-select" class="mb-2">
+                <option value="" selected disabled>Vyberte kategorii...</option>
+                {% for product in products %}
+                    <option value="{{ product.id }}">{{ product.name }}</option>
                 {% endfor %}
             </select>
-            <button type="submit" class="mt-1">Odeslat objednávku</button>
+    
+            <label for="product-type-select">Upřesněte výběr:</label>
+            <select name="product_type" id="product-type-select" disabled>
+                <option value="" selected disabled>Nejdříve vyberte kategorii...</option>
+            </select>
+    
+            <button type="submit" id="submit-btn" class="mt-1" disabled>Odeslat objednávku</button>
         </form>
     </div>
+    
+    <script id="product-data" type="application/json">
+        {
+            {% for product in products %}
+                "{{ product.id }}": [
+                    {% for pt in product.product_types.all %}
+                        {"id": "{{ pt.id }}", "name": "{{ pt.name }}"}{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        }
+    </script>
 </div>
 
 <div class="card mt-2">
@@ -56,4 +75,31 @@
         </tbody>
     </table>
 </div>
+<script>
+    const productSelect = document.getElementById('product-select');
+    const typeSelect = document.getElementById('product-type-select');
+    const submitBtn = document.getElementById('submit-btn');
+    const productData = JSON.parse(document.getElementById('product-data').textContent);
+
+    productSelect.addEventListener('change', function() {
+        const productId = this.value;
+        const types = productData[productId] || [];
+
+        typeSelect.innerHTML = '<option value="" selected disabled>Vyberte konkrétní druh...</option>';
+        
+        types.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type.id;
+            option.textContent = type.name;
+            typeSelect.appendChild(option);
+        });
+
+        typeSelect.disabled = false;
+        submitBtn.disabled = true;
+    });
+
+    typeSelect.addEventListener('change', function() {
+        submitBtn.disabled = false;
+    });
+</script>
 {% endblock %}
