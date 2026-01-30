@@ -35,7 +35,8 @@ class Order(models.Model):
         ('ACCEPTED', 'Přijatá'),
         ('REJECTED', 'Odmítnutá'),
         ('COMPLETED', 'Dokončená'),
-        ('TIMEDOUT', 'Propáslá')
+        ('TIMEDOUT', 'Propáslá'),
+        ('ARCHIVED', 'Archivovaná'),
     ]
 
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
