@@ -1,10 +1,18 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
+import hashlib
+from django.conf import settings
 
 class Table(models.Model):
-    number = models.IntegerField(unique=True)
-    
+    number = models.PositiveIntegerField(unique=True)
+
+    def get_current_token(self):
+        
+        raw_string = f"{settings.SECRET_KEY}-{self.number}"
+        
+        return hashlib.sha256(raw_string.encode()).hexdigest()[:10]
+
     def __str__(self):
         return f"Stůl {self.number}"
 
