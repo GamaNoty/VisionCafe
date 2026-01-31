@@ -27,7 +27,7 @@ K instalaci je vyžadován **Docker** a **Docker Compose**.
     docker-compose up --build
     ```
 
-2.  **Provedení migrací databáze (v novém terminálu):**
+2.  **Provedení migrací databáze:**
     ```bash
     docker-compose exec web python manage.py migrate
     ```
