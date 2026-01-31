@@ -38,6 +38,6 @@ K instalaci je vyžadován **Docker** a **Docker Compose**.
     ```
 
 4.  **Přístup k aplikaci:**
-    * **Zákaznická zóna:** `http://localhost:8000/stul/#/hash/` Číslo stolu a jeho hash.
+    * **Zákaznická zóna:** `http://localhost:8000/stul/#/hash/` Číslo stolu a jeho hash (viditelný v admin dashboardu).
     * **Staff Dashboard:** `http://localhost:8000/zamestnanec/`
     * **Admin rozhraní:** `http://localhost:8000/admin/`
