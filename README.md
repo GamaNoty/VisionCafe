@@ -1,20 +1,20 @@
-# Objednávkový systém (Django & Docker)
+# Objednávkový systém (Django)
 
-Tento projekt je komplexní webová aplikace pro správu objednávek v kavárně. Zákazníci si mohou objednat přímo u stolu pomocí QR kódu, zatímco personál spravuje objednávky v dashboardu.
+Tento projekt je webová aplikace pro správu objednávek v kavárně. Zákazníci si mohou objednat přímo u stolu pomocí QR kódu, zatímco personál spravuje objednávky v dashboardu.
 
 ---
 
 ## Hlavní Funkce
 
-* **Zabezpečené URL stolů:** Každý stůl má unikátní URL s SHA-256 hashem (tokenem). To zabraňuje útokům typu IDOR.
+* **Zabezpečené URL stolů:** Každý stůl má unikátní URL s hashem. To zabraňuje útokům typu IDOR.
 * **Stavy objednávek:** Systém automaticky vypočítává stav podle času a logiky:
     * **Nová:** Objednávka čeká na přijetí (do 10 minut).
     * **Propáslá:** Číšník si objednávky nevšiml a vypršel časový limit 10 minut.
     * **Přijatá:** Objednávka se připravuje.
     * **Nestihnutá:** Objednávka nebyla dokončena do 15 minut od jejího přijetí.
     * **Odmítnutá:** Objednávka byla zamítnuta.
-* **Staff Dashboard:** Soukromá zóna pro personál vyžadující přihlášení (`is_staff`). Obsahuje přehlednou tabulku s rozlišenými stavy a možností archivace starých objednávek.
-* **Docker:** Aplikace je plně kontejnerizovaná pro snadné a konzistentní nasazení v jakémkoliv prostředí.
+* **Staff Dashboard:** Soukromá zóna pro personál vyžadující přihlášení. Obsahuje tabulku s rozlišenými stavy a možností archivace starých objednávek.
+* **Docker:** Aplikace je kontejnerizovaná pro nasazení v jakémkoliv prostředí.
 
 ---
 
