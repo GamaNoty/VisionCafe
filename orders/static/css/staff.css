@@ -20,6 +20,19 @@
 .dashboard-table thead {
   background: var(--light-gray);
 }
+.form-logout {
+  display: inline;
+}
+.btn-logout {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+}
 .btn-action {
   padding: 8px 12px;
   font-size: 0.85rem;
@@ -52,5 +65,5 @@
   cursor: pointer;
 }
 .remove-form {
-  display:inline;
+  display: inline;
 }

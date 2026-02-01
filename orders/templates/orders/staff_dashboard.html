@@ -9,12 +9,12 @@
 {% endblock %}
 
 {% block content %}
-<div class="user-info" style="">
+<div class="user-info">
     <span>Přihlášen: <strong>{{ user.username }}</strong></span>
     
-    <form action="{% url 'admin:logout' %}" method="post" style="display: inline;">
+    <form class ="form-logout"action="{% url 'admin:logout' %}" method="post">
         {% csrf_token %}
-        <button type="submit" class="btn-logout" style="background: none; border: none; color: #d32f2f; cursor: pointer; text-decoration: underline; font-family: inherit; font-size: inherit; padding: 0;">
+        <button type="submit" class="btn-logout">
             Odhlásit se
         </button>
     </form>
@@ -62,7 +62,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="6" class="text-center small-gray" style="padding: 3rem;">
+                <td colspan="6" class="text-center small-gray">
                     Aktuálně nejsou žádné nové objednávky.
                 </td>
             </tr>

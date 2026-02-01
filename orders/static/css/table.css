@@ -46,3 +46,6 @@ button:disabled {
   color: red;
   font-size: 0.8em;
 }
+.text-center .small-gray {
+  padding: 3rem;
+}
